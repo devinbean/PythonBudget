@@ -1,3 +1,5 @@
+filename = 'export.csv'
+
 def plot_pie(filename):
     
     from itertools import chain
@@ -10,18 +12,10 @@ def plot_pie(filename):
         "Flatten one level of nesting"
         return chain.from_iterable(listOfLists)
 
-
     memo = []
     price = []
     finalmemo = []
     finalprice = []
-    fastfood_price = []
-    bar_and_restaurant = []
-    gas = []
-    transport = []
-    groceries = []
-    entertainment = []
-    total = []
 
     with open(filename,'rU') as budget:
         reader = csv.reader(budget)
@@ -45,53 +39,32 @@ def plot_pie(filename):
     data = dict(zip(finalmemo,finalprice))
     orderddata = OrderedDict(data)
 
+    category = OrderedDict.fromkeys(["Total", "Other", "Gas", "Fast Food", "Bar and Restaurant","Transportation","Groceries","Entertainment"],0.0)
 
-    for key, value in orderddata.iteritems():
-        if value:
-            total.append(float(value))
-        if '5814' in key:
-            fastfood_price.append(float(value))
-        if any(s in key for s in ['5812','5813','7999']):
-            bar_and_restaurant.append(float(value))
-        if '5542' in key:
-            gas.append(float(value))
-        if any(s in key for s in ['4112','4789','4121','4111','4131']):
-            transport.append(float(value))
-        if any(s in key for s in ['5499']):
-            groceries.append(float(value))
-        if any(s in key for s in ['7922','5735','7832','5968']):
-            entertainment.append(float(value))
+    category_map = {"5814": "Fast Food", "5812":"Bar and Restaurant","5813": "Bar and Restaurant","7999": "Bar and Restaurant", "5542":"Gas", "4112": "Transportation", "4789": "Transportation", "4121": "Transportation", "4111": "Transportation", "4131": "Transportation","5499":"Groceries","7922":"Entertainment",
+"5735": "Entertainment","7832": "Entertainment","5968": "Entertainment"}
 
 
+    for key, val in orderddata.iteritems():
+        if val:
+            category["Total"] += abs(float(val))
+        for cat_key in category_map.keys():
+            if cat_key in key:
+                category[category_map[cat_key]] += abs(float(val))
 
+    category["Other"] = category["Total"] - sum([category["Gas"], category["Fast Food"], category["Bar and Restaurant"], category["Transportation"], category["Entertainment"]])
 
-    total = abs(sum(total))
-    entertainment = abs(sum(entertainment))
-    groceries = abs(sum(groceries))
-    transport = abs(sum(transport))
-    gas = abs(sum(gas))
-    fastfood_price = abs(sum(fastfood_price))
-    bar_and_restaurant = abs(sum(bar_and_restaurant))
-    other = total - (bar_and_restaurant + fastfood_price + gas + transport + groceries + entertainment)
+    category.pop("Total")
 
-#    print 'Total: %0.2f' % total
-#    print 'Other: %0.2f' % other
-#    print 'Gas: %0.2f' % gas
-#    print 'Fast Food: %0.2f' % fastfood_price
-#    print 'Bar and Resaurant: %0.2f' % bar_and_restaurant
+    for key, val in category.items():
+        if val == 0:
+            category.pop(key)
 
-    labels = ['Other', 'Fast Food', 'Bar and Restaurant','Gas', 'Transport', 'Groceries', 'Entertainment']
-    sizes = [other, fastfood_price, bar_and_restaurant, gas, transport, groceries,entertainment]
-
-    for idx, expense in enumerate(sizes):
-        if expense == 0:
-            del sizes[idx]
-            del labels[idx]
-
+    sizes = category.values()
+    labels = category.keys()
 
     plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
 
-    # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
 
     plt.show()
