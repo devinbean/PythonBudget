@@ -63,12 +63,12 @@ def plot_pie(filename):
     sizes = category.values()
     labels = category.keys()
 
-#
-#    plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
-#
-#    plt.axis('equal')
-#
-#    plt.show()
+
+    plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
+
+    plt.axis('equal')
+
+    plt.show()
 
 if __name__ == "__main__": plot_pie(filename)
 
