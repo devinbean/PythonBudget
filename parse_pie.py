@@ -1,11 +1,8 @@
-filename = 'export.csv'
-
 def plot_pie(filename):
     
     from itertools import chain
     from collections import OrderedDict
     import csv
-    import re
     import matplotlib.pyplot as plt
 
     def flatten(listOfLists):
@@ -63,6 +60,8 @@ def plot_pie(filename):
     sizes = category.values()
     labels = category.keys()
 
+    print category_map.keys()
+
     plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
 
     plt.axis('equal')
@@ -70,7 +69,6 @@ def plot_pie(filename):
     plt.show()
 
 if __name__ == "__main__": plot_pie(filename)
-
 
 
 
