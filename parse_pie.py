@@ -1,3 +1,5 @@
+filename = 'export.csv'
+
 def plot_pie(filename):
     
     from itertools import chain
@@ -33,6 +35,7 @@ def plot_pie(filename):
     del finalmemo[0]
     del finalprice[0]
 
+
     data = dict(zip(finalmemo,finalprice))
     orderddata = OrderedDict(data)
 
@@ -60,13 +63,12 @@ def plot_pie(filename):
     sizes = category.values()
     labels = category.keys()
 
-    print category_map.keys()
-
-    plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
-
-    plt.axis('equal')
-
-    plt.show()
+#
+#    plt.pie(sizes, labels=labels, autopct='%1.f%%', pctdistance=0.7 ,shadow=True, startangle=90)
+#
+#    plt.axis('equal')
+#
+#    plt.show()
 
 if __name__ == "__main__": plot_pie(filename)
 
